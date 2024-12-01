@@ -58,3 +58,14 @@ function updateBigCup() {
     liters.innerText = `${(4 - (250 * fullCups) / 1000).toFixed(2)}L`
   }
 }
+
+document.getElementById('restart').addEventListener('click', resetCups)
+
+function resetCups() {
+  fullCups = 0
+  localStorage.setItem('fullCups', fullCups)
+  
+  smallCups.forEach(cup => cup.classList.remove('full'))
+  updateBigCup()
+}
+
