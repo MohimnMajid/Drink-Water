@@ -3,18 +3,20 @@ const liters = document.getElementById('liters')
 const percentage = document.getElementById('percentage')
 const remained = document.getElementById('remained')
 
+let fullCups = localStorage.getItem('fullCups') ? parseInt(localStorage.getItem('fullCups')) : 0;
+
 updateBigCup()
 
 smallCups.forEach((cup, idx) => {
+  if (idx < fullCups) {
+    cup.classList.add('full')
+  }
+
   cup.addEventListener('click', () => highlightCups(idx))
 })
 
 function highlightCups(idx) {
-  if (
-    idx === smallCups.length - 1 &&
-    smallCups[idx].classList.contains('full')
-  )
-    idx--
+  if (idx === smallCups.length - 1 && smallCups[idx].classList.contains('full')) idx--
   else if (
     smallCups[idx].classList.contains('full') &&
     !smallCups[idx].nextElementSibling.classList.contains('full')
@@ -30,11 +32,13 @@ function highlightCups(idx) {
     }
   })
 
+  fullCups = idx + 1;
+  localStorage.setItem('fullCups', fullCups);
+
   updateBigCup()
 }
 
 function updateBigCup() {
-  const fullCups = document.querySelectorAll('.cup-small.full').length
   const totalCups = smallCups.length
 
   if (fullCups === 0) {
