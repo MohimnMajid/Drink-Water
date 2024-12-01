@@ -3,7 +3,7 @@ const liters = document.getElementById('liters')
 const percentage = document.getElementById('percentage')
 const remained = document.getElementById('remained')
 
-let fullCups = localStorage.getItem('fullCups') ? parseInt(localStorage.getItem('fullCups')) : 0;
+let fullCups = localStorage.getItem('fullCups') ? parseInt(localStorage.getItem('fullCups')) : 0
 
 updateBigCup()
 
@@ -14,6 +14,8 @@ smallCups.forEach((cup, idx) => {
 
   cup.addEventListener('click', () => highlightCups(idx))
 })
+
+document.getElementById('restart').addEventListener('click', resetCups)
 
 function highlightCups(idx) {
   if (idx === smallCups.length - 1 && smallCups[idx].classList.contains('full')) idx--
@@ -32,8 +34,8 @@ function highlightCups(idx) {
     }
   })
 
-  fullCups = idx + 1;
-  localStorage.setItem('fullCups', fullCups);
+  fullCups = idx + 1
+  localStorage.setItem('fullCups', fullCups)
 
   updateBigCup()
 }
@@ -55,17 +57,14 @@ function updateBigCup() {
     remained.style.height = 0
   } else {
     remained.style.visibility = 'visible'
-    liters.innerText = `${(4 - (250 * fullCups) / 1000).toFixed(2)}L`
+    liters.innerText = `${(3 - (250 * fullCups) / 1000).toFixed(2)}L`
   }
 }
-
-document.getElementById('restart').addEventListener('click', resetCups)
 
 function resetCups() {
   fullCups = 0
   localStorage.setItem('fullCups', fullCups)
-  
+
   smallCups.forEach(cup => cup.classList.remove('full'))
   updateBigCup()
 }
-
