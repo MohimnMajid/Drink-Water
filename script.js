@@ -2,13 +2,15 @@ const smallCups = document.querySelectorAll('.cup-small');
 const liters = document.getElementById('liters');
 const percentage = document.getElementById('percentage');
 const remained = document.getElementById('remained');
-const restartBtn = document.getElementById('restart-btn');
-const timeRemaining = document.getElementById('time-remaining');
+const countdownDisplay = document.getElementById('time-remaining');
+const resetButton = document.getElementById('reset');
+const currentDateDisplay = document.getElementById('date-display');
 
 let fullCups = localStorage.getItem('fullCups') ? parseInt(localStorage.getItem('fullCups')) : 0;
 
 updateBigCup();
-displayCountdown();
+displayCurrentDate();
+startCountdown();
 
 smallCups.forEach((cup, idx) => {
   if (idx < fullCups) {
@@ -18,7 +20,7 @@ smallCups.forEach((cup, idx) => {
   cup.addEventListener('click', () => highlightCups(idx));
 });
 
-restartBtn.addEventListener('click', resetCups);
+resetButton.addEventListener('click', resetCups);
 
 function highlightCups(idx) {
   if (idx === smallCups.length - 1 && smallCups[idx].classList.contains('full')) idx--;
@@ -64,35 +66,42 @@ function updateBigCup() {
 }
 
 function resetCups() {
-  smallCups.forEach(cup => cup.classList.remove('full'));
   fullCups = 0;
   localStorage.removeItem('fullCups');
+  smallCups.forEach(cup => cup.classList.remove('full'));
   updateBigCup();
 }
 
-function displayCountdown() {
+function displayCurrentDate() {
   const now = new Date();
-  let targetTime = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  currentDateDisplay.innerText = now.toLocaleDateString(undefined, options);
+}
 
-  targetTime.setHours(24, 0, 0, 0);
+function startCountdown() {
+  const now = new Date();
+  const resetTime = new Date();
+  resetTime.setHours(24, 0, 0, 0);
 
-  if (now >= targetTime) {
-    targetTime.setDate(targetTime.getDate() + 1);
+  if (now >= resetTime) {
+    resetTime.setDate(resetTime.getDate() + 1);
   }
 
-  const interval = setInterval(() => {
+  const updateCountdown = () => {
     const currentTime = new Date();
-    const timeDiff = targetTime - currentTime;
+    const timeDifference = resetTime - currentTime;
 
-    if (timeDiff <= 0) {
-      clearInterval(interval);
+    if (timeDifference <= 0) {
       resetCups();
-      displayCountdown();
+      startCountdown();
     } else {
-      const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
-      const seconds = Math.floor((timeDiff / 1000) % 60);
-      timeRemaining.innerText = `${hours}h ${minutes}m ${seconds}s`;
+      const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+      countdownDisplay.innerText = `${hours}h ${minutes}m ${seconds}s`;
     }
-  }, 1000);
+  };
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
 }
