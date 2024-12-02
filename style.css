@@ -134,6 +134,23 @@ h3 {
   background-color: #d93a3a;
 }
 
+.time-text {
+  font-size: 20px;
+}
+
+#current-date {
+  color: black;
+}
+
+.date-box {
+  text-align: center;
+  border: 1px solid #144fc6;
+  background-color: #6ab3f8;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 2px 2px 4px 2px black;
+}
+
 
 footer {
   margin-top: 20px;
