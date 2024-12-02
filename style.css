@@ -117,7 +117,7 @@ h3 {
   color: black;
 }
 
-.restart-btn {
+#restart-btn {
   background-color: #ff4747;
   color: white;
   border: none;
@@ -130,7 +130,7 @@ h3 {
   transition: background-color 0.3s;
 }
 
-.restart-btn:hover {
+#restart-btn:hover {
   background-color: #d93a3a;
 }
 
